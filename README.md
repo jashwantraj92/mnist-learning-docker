@@ -1,44 +1,35 @@
-# mnist-learning-docker
+# mnist-contaier
 
 Learning MNIST using TensorFlow in a Docker container
 
 
 ## Prepare
-You will need the MNIST data set in order to run these Docker images
+MNIST data set has to downloaded and prepared for users to specify a path to test images
 
-You can use the provided scripts, based on: https://github.com/datapythonista/mnist,
-to download the MNIST dataset from: http://yann.lecun.com/exdb/mnist/
+the script prepare.sh will download the dataset to /mnt/data/mnist
 
-
-Running the script `download-mnist-data.py --out-dir=<out_dir>` downloads the training and test sets into
+the script runs `download-mnist-data.py --out-dir=<out_dir>` downloads the training and test sets into
 the required folder/file structure:
 
- - \<out_dir> / \<train|test> / \<label> / \<image_index>.png
+- \<out_dir> / \<train|test> / \<label> / \<image_index>.png
 
-By default `<out_dir>="/mnt/data/Data/mnist"` 
+By default `<out_dir>="/mnt/data/mnist"` 
 
-## Basic Docker image
-
-In this image, you will define and train a TensorFlow model using Keras.
-After preparing the data, you will need to run the following three scripts.
 
 #### Build the Docker image
 
-To build the Docker image, run the `build.sh` script.
+To build the Docker image, run the command.sh script with two arguments.
+The first argument specifies "build" or "run". The second argument specfies the device "CPU" or "GPU"
+Note, for GPU, you need to comment line-1 and uncomment line 4 in Dockerfile. 
 
-#### Train the model
+#### Run the container for training and inference
 
-To train the model, run the Docker image with the `train.sh` script.
+Run the command.sh script with <run> <device>.
+By default the training is set up to run for 3 epochs and batch size 16. These parameters are configurable by passing command line arguments to the docker run command.
+ -n (num epochs)
+ -b (batch_size)
 
-Depending on your hardware, this will take a while.
-With an Nvidia Geforce 1070 it takes about 25s per epoch.
-By default the script is set up to run for 3 epochs.
-
-#### Test predictions
-
-To test the predictions of the model, run the Docker image with the
-`test_predictions.sh` script.
-
-This will load the pretrained model from disk and test the predictions on
-10 batches of image. For each failed prediction, the image will be displayed,
-and the true and predicted labels will be printed to the console.
+Once training is complete, the model is saved at /mnt/data/mnist/mnist-model. Then the container waits for user-input for an image path. User can enter any path available from /mnt/data/mnist/test/<folder-number>. Example /mnt/data/mnist/test/1/1129.png
+ 
+Note that, only for first time container execution, training is trigerred. For subsequent runs, the trained model saved in /mnt/data/mnist/mnist-model will be resused for prediction.
+To re-run the training, the folder can be deleted. 
