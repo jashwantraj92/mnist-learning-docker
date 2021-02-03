@@ -33,17 +33,7 @@ def parse_arguments():
 
 
 def predict(batch_size=16):
-    """if (not sys.argv[1:]):
-        path="/mnt/data/Data/mnist/model.h5"
-        print("######################\n\n No model path specified. Switching to default model /mnt/data/Data/mnist/model.h5\n\n######################")
-    else:
-        if os.path.exists(sys.argv[1]):
-            path = sys.argv[1]
-        else:
-            print("######################\n\n No such model exists. Switching to default model /mnt/data/Data/mnist/model.h5\n\n######################")
-            path="/mnt/data/Data/mnist/model.h5"
-    """
-    path="/mnt/data/Data/mnist/mnist-model"
+    path="/mnt/data/mnist/mnist-model"
     model = load_model(path)
     model.summary()
     #model.load_weights(path)
@@ -61,8 +51,8 @@ def predict(batch_size=16):
 
 def main():
     set_device()
-    if path.exists("/mnt/data/Data/mnist/mnist-model"):
-        print("###########################\nTrained model already exists at path /mnt/data/Data/mnist/\n Predicting from pretrained model\n#######################")
+    if path.exists("/mnt/data/mnist/mnist-model"):
+        print("###########################\nTrained model already exists at path /mnt/data/mnist/\n Predicting from pretrained model\n#######################")
         predict()
         return
     args = parse_arguments()
@@ -106,7 +96,7 @@ def main():
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
 
     model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_split=0.1)
-    model.save('/mnt/data/Data/mnist/mnist-model')
+    model.save('/mnt/data/mnist/mnist-model')
     score = model.evaluate(x_test, y_test, verbose=0)
     print("Test loss:", score[0])
     print("Test accuracy:", score[1])

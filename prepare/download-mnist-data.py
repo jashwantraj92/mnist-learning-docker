@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--out-dir",
                         dest="out_dir",
-                        default="/mnt/data/Data/mnist",
+                        default="/mnt/data/mnist",
                         help="Output directory in which to save the image files")
     args = parser.parse_args()
 
